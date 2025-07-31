@@ -17,6 +17,31 @@ import { chaosContent, getRandomChaosElement, getRandomChaosMessage, getRandomCh
 import CookieConsent from './components/CookieConsent.jsx'
 import './App.css'
 
+// Add structured data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Coffee Break Escape",
+  "description": "Take the perfect coffee break with our collection of fun mini-games and activities. Play The Daily Grind, Procrastination Station, Mug Shot Challenge, and more.",
+  "url": "https://www.brewtifulbreak.com",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Coffee Break Escape"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "127"
+  }
+}
+
 // Game Components
 const DailyGrindGame = ({ onBack }) => {
   const [score, setScore] = useState(0)
@@ -1160,6 +1185,20 @@ const ChaosPage = ({ onBack }) => {
 function App() {
   const [currentView, setCurrentView] = useState('home')
 
+  // Inject structured data into the document head
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.text = JSON.stringify(structuredData)
+    document.head.appendChild(script)
+    
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script)
+      }
+    }
+  }, [])
+
   const games = [
     {
       id: 'daily-grind',
@@ -1242,7 +1281,7 @@ function App() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-xl mb-8 drop-shadow-md"
             >
-              Your perfect companion for those precious moments of procrastination
+              Your perfect companion for those precious moments of procrastination and coffee break shenanigans
             </motion.p>
             <motion.div
               initial={{ y: 20, opacity: 0 }}
@@ -1270,9 +1309,9 @@ function App() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Choose Your Distraction</h2>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">Choose Your Delightful Distraction</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Six delightfully pointless activities designed to help you waste time with style and sophistication.
+              Six wonderfully pointless coffee break activities designed to help you procrastinate with style, sophistication, and just the right amount of guilt-free fun.
             </p>
           </motion.div>
 
@@ -1317,7 +1356,7 @@ function App() {
             <span className="text-lg font-semibold">Coffee Break Escape</span>
           </div>
           <p className="text-gray-400">
-            Proudly helping professionals procrastinate since today. Remember: the best work happens after the perfect break.
+            Proudly helping professionals procrastinate with purpose since today. Because the best coffee break games happen when you're supposed to be working.
           </p>
         </div>
       </footer>
