@@ -1217,7 +1217,7 @@ function App() {
     {
       id: 'mug-shot',
       title: 'Mug Shot',
-      description: 'How many coffee mugs can you shoot in 3 minutes? Race against time for the highest score!',
+      description: 'How many coffee mugs can you shoot in 1 minute? Race against time for the highest score!',
       icon: mugShotIcon,
       component: MugShotGame
     },
