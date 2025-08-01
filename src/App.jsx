@@ -886,13 +886,13 @@ const UselessFacts = ({ onBack }) => {
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">40+</div>
+              <div className="text-2xl font-bold text-purple-600">60+</div>
               <div className="text-sm text-gray-600">Useless Facts</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">10</div>
+              <div className="text-2xl font-bold text-purple-600">14</div>
               <div className="text-sm text-gray-600">Categories</div>
             </CardContent>
           </Card>
