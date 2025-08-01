@@ -1355,12 +1355,14 @@ function App() {
             <Coffee className="w-6 h-6" />
             <span className="text-lg font-semibold">Coffee Break Escape</span>
           </div>
-          <p className="text-gray-400">
-            Proudly helping professionals procrastinate with purpose since today. Because the best coffee break games happen when you're supposed to be working.
-          </p>
-          <span className="absolute right-8 bottom-8 text-xs text-gray-400">
-            Created by Michal Šomský
-          </span>
+          <div className="flex flex-col md:flex-row md:justify-center md:items-center md:gap-4">
+            <p className="text-gray-400">
+              Proudly helping professionals procrastinate with purpose since today. Because the best coffee break games happen when you're supposed to be working.
+            </p>
+            <span className="text-xs text-gray-400 md:ml-4 mt-2 md:mt-0">
+              Created by Michal Šomský
+            </span>
+          </div>
         </div>
       </footer>
       <CookieConsent />
