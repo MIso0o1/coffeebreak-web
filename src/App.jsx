@@ -1349,8 +1349,8 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="max-w-6xl mx-auto px-8 text-center">
+      <footer className="bg-gray-800 text-white py-8 relative">
+        <div className="max-w-6xl mx-auto px-8 text-center relative">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Coffee className="w-6 h-6" />
             <span className="text-lg font-semibold">Coffee Break Escape</span>
@@ -1358,6 +1358,9 @@ function App() {
           <p className="text-gray-400">
             Proudly helping professionals procrastinate with purpose since today. Because the best coffee break games happen when you're supposed to be working.
           </p>
+          <span className="absolute right-8 bottom-8 text-xs text-gray-400">
+            Created by Michal Šomský
+          </span>
         </div>
       </footer>
       <CookieConsent />
