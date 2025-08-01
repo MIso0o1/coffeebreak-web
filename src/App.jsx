@@ -1360,7 +1360,7 @@ function App() {
               Proudly helping professionals procrastinate with purpose since today. Because the best coffee break games happen when you're supposed to be working.
             </p>
             <span className="text-xs text-gray-400">
-              Created by Michal Šomský
+              Created by Michal Šomský | michal.somsky@protonmail.com
             </span>
           </div>
         </div>
