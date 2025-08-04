@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Coffee, Clock, Target, ArrowLeft, Home, Lightbulb, RefreshCw, Zap } from 'lucide-react'
+import { Coffee, Clock, Target, ArrowLeft, Home, Lightbulb, RefreshCw, Zap, Eye, Brain } from 'lucide-react'
 import heroImage from './assets/hero_image.png'
 import dailyGrindIcon from './assets/daily_grind_icon.png'
 import procrastinationIcon from './assets/procrastination_station_icon.png'
 import mugShotIcon from './assets/mug_shot_icon.png'
+import truecoloricon from './assets/true_color_icon.png'
+import uniqueicon from './assets/unique_icon.png'
 import reactionTimeIcon from './assets/reaction_time_icon.png'
 import uselessFactsIcon from './assets/useless_facts_icon.png'
 import chaosPageIcon from './assets/chaos_page_icon.png'
@@ -15,6 +17,8 @@ import dailyGrindBg from './assets/daily_grind_game_background.png'
 import { getRandomFact, getAllCategories, getFactsByCategory } from './data/uselessFacts.js'
 import { chaosContent, getRandomChaosElement, getRandomChaosMessage, getRandomChaosWord } from './data/chaosContent.js'
 import CookieConsent from './components/CookieConsent.jsx'
+import TrueColorGame from './components/TrueColorGame.jsx'
+import UniqueGame from './components/UniqueGame.jsx'
 import './App.css'
 
 // Add structured data for SEO
@@ -1241,6 +1245,20 @@ function App() {
       description: 'Revolutionary methods to enhance your productivity. Scientifically proven techniques await!',
       icon: chaosPageIcon,
       component: ChaosPage
+    },
+    {
+      id: 'true-color',
+      title: 'True Color Challenge',
+      description: 'Test your mental agility with the Stroop effect! Can you ignore distracting text and focus on colors?',
+      icon: truecoloricon,
+      component: TrueColorGame
+    },
+    {
+      id: 'unique-challenge',
+      title: 'Unique Challenge',
+      description: 'Find the one shape that is unique in either its shape OR its color. Sharpen your visual attention skills!',
+      icon: uniqueicon,
+      component: UniqueGame
     }
   ]
 
@@ -1315,7 +1333,7 @@ function App() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {games.map((game, index) => (
               <motion.div
                 key={game.id}
