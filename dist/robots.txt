@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.brewtifulbreak.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+

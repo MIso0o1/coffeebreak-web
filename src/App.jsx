@@ -19,6 +19,7 @@ import { chaosContent, getRandomChaosElement, getRandomChaosMessage, getRandomCh
 import CookieConsent from './components/CookieConsent.jsx'
 import TrueColorGame from './components/TrueColorGame.jsx'
 import UniqueGame from './components/UniqueGame.jsx'
+import LoadingScreen from './components/LoadingScreen.jsx'
 import './App.css'
 
 // Add structured data for SEO
@@ -1187,7 +1188,8 @@ const ChaosPage = ({ onBack }) => {
 
 // Main App Component
 function App() {
-  const [currentView, setCurrentView] = useState('home')
+  const [currentView, setCurrentView] = useState("home")
+  const [isLoading, setIsLoading] = useState(true)
 
   // Inject structured data into the document head
   useEffect(() => {
@@ -1266,13 +1268,19 @@ function App() {
 
   if (currentGame) {
     const GameComponent = currentGame.component
-    return <GameComponent onBack={() => setCurrentView('home')} />
+    return <GameComponent onBack={() => setCurrentView("home")} />
+  }
+
+  // Show loading screen first
+  if (isLoading) {
+    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />
   }
 
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
       className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50"
     >
       {/* Hero Section */}
