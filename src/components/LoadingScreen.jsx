@@ -26,12 +26,12 @@ const LoadingScreen = ({ onLoadingComplete }) => {
             setShowContent(true)
             setTimeout(() => {
               onLoadingComplete()
-            }, 1000)
-          }, 1000)
+            }, 500) // was 1000, now 500ms
+          }, 500) // was 1000, now 500ms
           return prev
         }
       })
-    }, 1200)
+    }, 600) // was 1200, now 600ms
 
     return () => clearInterval(phaseTimer)
   }, [onLoadingComplete])
@@ -118,14 +118,14 @@ const LoadingScreen = ({ onLoadingComplete }) => {
             <motion.div
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "100%" }}
-              transition={{ delay: 1.5, duration: 3 }}
+              transition={{ delay: 1.5, duration: 1.5 }} // was duration: 3
               className="max-w-xs mx-auto"
             >
               <div className="w-full bg-amber-200 rounded-full h-2">
                 <motion.div
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
-                  transition={{ delay: 1.5, duration: 3, ease: "easeInOut" }}
+                  transition={{ delay: 1.5, duration: 1.5, ease: "easeInOut" }} // was duration: 3
                   className="bg-gradient-to-r from-amber-400 to-orange-500 h-2 rounded-full"
                 />
               </div>
