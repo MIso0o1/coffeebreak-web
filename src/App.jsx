@@ -20,6 +20,11 @@ import CookieConsent from './components/CookieConsent.jsx'
 import TrueColorGame from './components/TrueColorGame.jsx'
 import UniqueGame from './components/UniqueGame.jsx'
 import LoadingScreen from './components/LoadingScreen.jsx'
+import { AuthModal } from './components/AuthModal.jsx'
+import { UserMenu } from './components/UserMenu.jsx'
+import { GameStatsModal } from './components/GameStatsModal.jsx'
+import { useAuth } from './contexts/AuthContext.jsx'
+import { useGameStats } from './hooks/useGameStats.js'
 import './App.css'
 
 // Add structured data for SEO
@@ -49,16 +54,26 @@ const structuredData = {
 
 // Game Components
 const DailyGrindGame = ({ onBack }) => {
+  const { saveGameScore, isLoggedIn } = useGameStats()
   const [score, setScore] = useState(0)
   const [timeLeft, setTimeLeft] = useState(30)
   const [gameActive, setGameActive] = useState(false)
   const [distractions, setDistractions] = useState([])
+  const [statsSaved, setStatsSaved] = useState(false)
+
+  const handleSaveScore = () => {
+    if (score > 0 && isLoggedIn) {
+      saveGameScore('daily-grind', score, { distractionsHit: 0 })
+      setStatsSaved(true)
+    }
+  }
 
   const startGame = () => {
     setGameActive(true)
     setScore(0)
     setTimeLeft(30)
     setDistractions([])
+    setStatsSaved(false)
     
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -150,6 +165,21 @@ const DailyGrindGame = ({ onBack }) => {
                        score > 25 ? "Good job! You managed to stay focused." :
                        "Don't worry, even the best baristas get distracted sometimes."}
                     </p>
+                    {!isLoggedIn && (
+                      <p className="text-sm text-amber-600 mb-3">
+                        💡 Login to save your scores!
+                      </p>
+                    )}
+                    {isLoggedIn && !statsSaved && (
+                      <Button onClick={handleSaveScore} className="w-full mb-2 bg-green-600 hover:bg-green-700">
+                        Save Score
+                      </Button>
+                    )}
+                    {isLoggedIn && statsSaved && (
+                      <p className="text-sm text-green-600 mb-3">
+                        ✓ Score saved!
+                      </p>
+                    )}
                     <Button onClick={startGame}>Play Again</Button>
                   </div>
                 )}
@@ -209,9 +239,11 @@ const DailyGrindGame = ({ onBack }) => {
 }
 
 const ProcrastinationStation = ({ onBack }) => {
+  const { saveGameScore, isLoggedIn } = useGameStats()
   const [currentScenario, setCurrentScenario] = useState(0)
   const [score, setScore] = useState(0)
   const [gameOver, setGameOver] = useState(false)
+  const [statsSaved, setStatsSaved] = useState(false)
 
   const scenarios = [
     {
@@ -255,7 +287,10 @@ const ProcrastinationStation = ({ onBack }) => {
     setCurrentScenario(0)
     setScore(0)
     setGameOver(false)
+    setStatsSaved(false)
   }
+
+
 
   if (gameOver) {
     return (
@@ -285,6 +320,16 @@ const ProcrastinationStation = ({ onBack }) => {
                  score >= 4 ? "Amateur Procrastinator. You still have some productivity left in you." :
                  "Productivity Alert! You're dangerously close to being responsible."}
               </p>
+              {!isLoggedIn && (
+                <p className="text-sm text-purple-600">
+                  Login to save your scores!
+                </p>
+              )}
+              {isLoggedIn && statsSaved && (
+                <p className="text-sm text-green-600">
+                  Score saved!
+                </p>
+              )}
               <div className="space-x-4">
                 <Button onClick={resetGame}>Procrastinate Again</Button>
                 <Button variant="outline" onClick={onBack}>Back to Reality</Button>
@@ -341,18 +386,21 @@ const ProcrastinationStation = ({ onBack }) => {
 }
 
 const MugShotGame = ({ onBack }) => {
+  const { saveGameScore, isLoggedIn } = useGameStats()
   const [score, setScore] = useState(0)
   const [gameActive, setGameActive] = useState(false)
   const [mugs, setMugs] = useState([])
   const [gameOver, setGameOver] = useState(false)
   const [timeLeft, setTimeLeft] = useState(60) // 1 minute in seconds
   const [totalMugsShot, setTotalMugsShot] = useState(0)
+  const [statsSaved, setStatsSaved] = useState(false)
   const timerRef = useRef(null)
 
   const startGame = () => {
     setGameActive(true)
     setScore(0)
     setGameOver(false)
+    setStatsSaved(false)
     setTimeLeft(60)
     setTotalMugsShot(0)
     spawnMugs()
@@ -412,6 +460,15 @@ const MugShotGame = ({ onBack }) => {
     if (totalMugsShot >= 10) return `Not bad! ${totalMugsShot} mugs hit. Keep practicing your coffee marksmanship!`
     return `${totalMugsShot} mugs hit. Even coffee masters started somewhere. Try again!`
   }
+
+  const handleSaveScore = () => {
+    if (score > 0 && isLoggedIn) {
+      saveGameScore('mug-shot', score)
+      setStatsSaved(true)
+    }
+  }
+
+
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -495,6 +552,21 @@ const MugShotGame = ({ onBack }) => {
                         <div>Rate: <span className="font-bold">{(totalMugsShot / 1).toFixed(1)} mugs/min</span></div>
                       </div>
                     </div>
+                    {!isLoggedIn && (
+                      <p className="text-sm text-teal-600 mb-4">
+                        Login to save your scores!
+                      </p>
+                    )}
+                    {isLoggedIn && !statsSaved && (
+                      <Button onClick={handleSaveScore} className="w-full mb-2 bg-green-600 hover:bg-green-700">
+                        Save Score
+                      </Button>
+                    )}
+                    {isLoggedIn && statsSaved && (
+                      <p className="text-sm text-green-600 mb-4">
+                        Score saved!
+                      </p>
+                    )}
                     <Button onClick={startGame} className="bg-teal-600 hover:bg-teal-700">
                       <Target className="w-4 h-4 mr-2" />
                       Try Again
@@ -572,16 +644,19 @@ const MugShotGame = ({ onBack }) => {
 
 // Reaction Time Game Component
 const ReactionTimeGame = ({ onBack }) => {
+  const { saveGameScore, isLoggedIn } = useGameStats()
   const [gameState, setGameState] = useState('waiting') // 'waiting', 'ready', 'go', 'clicked', 'too-early'
   const [reactionTime, setReactionTime] = useState(null)
   const [bestTime, setBestTime] = useState(localStorage.getItem('bestReactionTime') || null)
   const [attempts, setAttempts] = useState([])
   const [startTime, setStartTime] = useState(null)
   const [timeoutId, setTimeoutId] = useState(null)
+  const [statsSaved, setStatsSaved] = useState(false)
 
   const startGame = () => {
     setGameState('ready')
     setReactionTime(null)
+    setStatsSaved(false)
     
     // Random delay between 1-5 seconds
     const delay = Math.random() * 4000 + 1000
@@ -618,6 +693,7 @@ const ReactionTimeGame = ({ onBack }) => {
 
   const resetGame = () => {
     setGameState('waiting')
+    setStatsSaved(false)
     clearTimeout(timeoutId)
   }
 
@@ -631,6 +707,13 @@ const ReactionTimeGame = ({ onBack }) => {
   }
 
   const averageTime = attempts.length > 0 ? Math.round(attempts.reduce((a, b) => a + b, 0) / attempts.length) : null
+
+  const handleSaveScore = () => {
+    if (reactionTime && isLoggedIn) {
+      saveGameScore('reaction-time', reactionTime)
+      setStatsSaved(true)
+    }
+  }
 
   return (
     <motion.div 
@@ -697,6 +780,22 @@ const ReactionTimeGame = ({ onBack }) => {
                   <div>• Professional gamers: 150-200ms</div>
                   <div>• Don't click too early or you'll have to restart!</div>
                 </div>
+
+                {!isLoggedIn && reactionTime && (
+                  <p className="text-sm text-yellow-600 mt-4">
+                    Login to save your scores!
+                  </p>
+                )}
+                {isLoggedIn && reactionTime && !statsSaved && (
+                  <Button onClick={handleSaveScore} className="w-full mt-4 bg-green-600 hover:bg-green-700">
+                    Save Score
+                  </Button>
+                )}
+                {isLoggedIn && statsSaved && (
+                  <p className="text-sm text-green-600 mt-4">
+                    Score saved!
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -1188,8 +1287,11 @@ const ChaosPage = ({ onBack }) => {
 
 // Main App Component
 function App() {
+  const { user, loading: authLoading } = useAuth()
   const [currentView, setCurrentView] = useState("home")
   const [isLoading, setIsLoading] = useState(true)
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showStatsModal, setShowStatsModal] = useState(false)
 
   // Inject structured data into the document head
   useEffect(() => {
@@ -1285,6 +1387,19 @@ function App() {
     >
       {/* Hero Section */}
       <section className="relative overflow-hidden">
+        <div className="absolute top-4 right-4 z-30">
+          {user ? (
+            <UserMenu onViewStats={() => setShowStatsModal(true)} />
+          ) : (
+            <Button 
+              variant="outline" 
+              className="bg-white/90 hover:bg-white"
+              onClick={() => setShowAuthModal(true)}
+            >
+              Login / Register
+            </Button>
+          )}
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent z-10"></div>
         <img 
           src={heroImage} 
@@ -1392,6 +1507,8 @@ function App() {
         </div>
       </footer>
       <CookieConsent />
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <GameStatsModal isOpen={showStatsModal} onClose={() => setShowStatsModal(false)} />
     </motion.div>
   )
 }

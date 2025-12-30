@@ -3,8 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { ArrowLeft, RefreshCw } from 'lucide-react'
+import { useGameStats } from '@/hooks/useGameStats.js'
+import { useAuth } from '@/contexts/AuthContext.jsx'
 
 const UniqueGame = ({ onBack }) => {
+  const { saveGameScore, isLoggedIn } = useGameStats()
   const [score, setScore] = useState(0)
   const [timeLeft, setTimeLeft] = useState(60)
   const [gameActive, setGameActive] = useState(false)
@@ -13,6 +16,7 @@ const UniqueGame = ({ onBack }) => {
   const [level, setLevel] = useState(1)
   const [feedback, setFeedback] = useState('')
   const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [statsSaved, setStatsSaved] = useState(false)
   const timerRef = useRef(null)
 
   const shapes = ['circle', 'square', 'triangle', 'diamond', 'star', 'hexagon']
@@ -122,6 +126,7 @@ const UniqueGame = ({ onBack }) => {
     setGameActive(true)
     setScore(0)
     setGameOver(false)
+    setStatsSaved(false)
     setTimeLeft(60)
     setLevel(1)
     setCorrectAnswers(0)
@@ -274,6 +279,21 @@ const UniqueGame = ({ onBack }) => {
                   <div className="text-2xl">{level}</div>
                 </div>
               </div>
+              {!isLoggedIn && (
+                <p className="text-sm text-blue-600">
+                  Login to save your scores!
+                </p>
+              )}
+              {isLoggedIn && !statsSaved && (
+                <Button onClick={() => { saveGameScore('unique-challenge', score); setStatsSaved(true) }} className="w-full bg-green-600 hover:bg-green-700">
+                  Save Score
+                </Button>
+              )}
+              {isLoggedIn && statsSaved && (
+                <p className="text-sm text-green-600">
+                  Score saved!
+                </p>
+              )}
               <div className="space-x-4">
                 <Button onClick={startGame}>
                   <RefreshCw className="w-4 h-4 mr-2" />
