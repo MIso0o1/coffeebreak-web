@@ -16,8 +16,11 @@ import { useAuth } from '../contexts/AuthContext'
 export const UserMenu = ({ onViewStats }) => {
   const { user, profile, signOut } = useAuth()
 
-  const handleSignOut = async () => {
+  const handleSignOut = async (e) => {
+    if (e) e.preventDefault()
     await signOut()
+    // Force a page reload to clear all states if necessary
+    window.location.reload()
   }
 
   const getInitials = () => {
@@ -57,10 +60,10 @@ export const UserMenu = ({ onViewStats }) => {
           <BarChart3 className="mr-2 h-4 w-4" />
           <span>My Stats</span>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem className="cursor-pointer"> 
+        <DropdownMenuItem className="cursor-pointer">
           <Trophy className="mr-2 h-4 w-4" />
           <span>Leaderboards</span>
-        </DropdownMenuItem>  */}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
           <LogOut className="mr-2 h-4 w-4" />

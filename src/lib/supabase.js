@@ -58,6 +58,10 @@ export const gameStatsHelpers = {
     console.log('saveGameStats: Starting with', { userId, gameId, score })
     
     try {
+      // Get the current session to get the access token
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token || supabaseAnonKey
+
       const payload = {
         user_id: userId,
         game_id: gameId,
@@ -74,7 +78,8 @@ export const gameStatsHelpers = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': supabaseAnonKey
+            'apikey': supabaseAnonKey,
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(payload)
         }

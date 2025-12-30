@@ -73,13 +73,20 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signOut = async () => {
-    const { error } = await authHelpers.signOut()
-    if (!error) {
+    try {
+      const { error } = await authHelpers.signOut()
+      if (error) throw error
+    } catch (error) {
+      console.error('Error during sign out:', error)
+    } finally {
+      // Always clear local state even if Supabase call fails
       setUser(null)
       setSession(null)
       setProfile(null)
+      // Optional: Clear any local storage if needed
+      localStorage.removeItem('supabase.auth.token')
     }
-    return { error }
+    return { error: null }
   }
 
   const value = {
