@@ -73,20 +73,29 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signOut = async () => {
+    console.log('AuthContext: Starting aggressive sign out...');
+    
     try {
-      const { error } = await authHelpers.signOut()
-      if (error) throw error
-    } catch (error) {
-      console.error('Error during sign out:', error)
-    } finally {
-      // Always clear local state even if Supabase call fails
-      setUser(null)
-      setSession(null)
-      setProfile(null)
-      // Optional: Clear any local storage if needed
-      localStorage.removeItem('supabase.auth.token')
+      // 1. Tell Supabase to sign out (with a short timeout)
+      await Promise.race([
+        authHelpers.signOut(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
+      ]).catch(err => console.warn('Signout call timed out or failed, proceeding with local clear'));
+
+      // 2. Clear ALL possible storage locations
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // 3. Clear local state
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      
+      console.log('AuthContext: Sign out complete');
+    } catch (err) {
+      console.error('AuthContext: Sign out error', err);
     }
-    return { error: null }
+    return { error: null };
   }
 
   const value = {

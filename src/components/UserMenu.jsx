@@ -17,10 +17,20 @@ export const UserMenu = ({ onViewStats }) => {
   const { user, profile, signOut } = useAuth()
 
   const handleSignOut = async (e) => {
-    if (e) e.preventDefault()
-    await signOut()
-    // Force a page reload to clear all states if necessary
-    window.location.reload()
+    console.log('Sign out button clicked');
+    try {
+      if (e && e.preventDefault) e.preventDefault();
+      if (e && e.stopPropagation) e.stopPropagation();
+      
+      // Wait for the sign out process to finish
+      await signOut();
+      
+      console.log('Sign out successful');
+      // No reload needed anymore, AuthContext will update the 'user' state
+      // and the UI will automatically switch to the logged-out view.
+    } catch (err) {
+      console.error('Sign out error:', err);
+    }
   }
 
   const getInitials = () => {
@@ -65,10 +75,13 @@ export const UserMenu = ({ onViewStats }) => {
           <span>Leaderboards</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
+        <div 
+          onClick={handleSignOut} 
+          className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-600"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign out</span>
-        </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   )
