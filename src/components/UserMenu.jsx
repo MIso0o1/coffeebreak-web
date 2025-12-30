@@ -70,10 +70,10 @@ export const UserMenu = ({ onViewStats }) => {
           <BarChart3 className="mr-2 h-4 w-4" />
           <span>My Stats</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
+        {/*<DropdownMenuItem className="cursor-pointer">
           <Trophy className="mr-2 h-4 w-4" />
           <span>Leaderboards</span>
-        </DropdownMenuItem>
+        </DropdownMenuItem>*/}
         <DropdownMenuSeparator />
         <div 
           onClick={handleSignOut} 
